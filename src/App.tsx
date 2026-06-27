@@ -140,6 +140,7 @@ export default function App() {
   const [modal, setModal] = useState<string|null>(null);
   const [form, setForm] = useState<any>({});
   const [photoPreview, setPhotoPreview] = useState<string|null>(null);
+  const [showNotif, setShowNotif] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const today = new Date().toISOString().split("T")[0];
@@ -241,6 +242,48 @@ export default function App() {
       </div>
 
       <div style={s.main}>
+        {/* HEADER */}
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:20, position:"relative" }}>
+          <h2 style={{ margin:0, color:th.text }}>
+            {tab==="dashboard"?"📊 "+t.dashboard:tab==="customers"?"👥 "+t.customers:tab==="properties"?"🏢 "+t.properties:tab==="contracts"?"📄 "+t.contracts:tab==="calendar"?"📅 "+t.calendar:"📈 "+t.reports}
+          </h2>
+          {/* Notification Bell */}
+          <div style={{ position:"relative" }}>
+            <button onClick={()=>setShowNotif(n=>!n)} style={{ background:"none", border:`1px solid ${th.border}`, borderRadius:10, padding:"8px 14px", cursor:"pointer", fontSize:18, position:"relative", color:th.text }}>
+              🔔
+              {todayReminders.length > 0 && (
+                <span style={{ position:"absolute", top:-6, right:-6, background:"#ef4444", color:"#fff", borderRadius:"50%", width:18, height:18, fontSize:11, fontWeight:800, display:"flex", alignItems:"center", justifyContent:"center" }}>
+                  {todayReminders.length}
+                </span>
+              )}
+            </button>
+            {showNotif && (
+              <div style={{ position:"absolute", top:44, right:0, background:th.card, border:`1px solid ${th.border}`, borderRadius:14, boxShadow:"0 8px 32px rgba(0,0,0,0.15)", width:300, zIndex:50, overflow:"hidden" }}>
+                <div style={{ padding:"12px 16px", borderBottom:`1px solid ${th.border}`, fontWeight:700, fontSize:13 }}>
+                  🔔 {lang==="fa"?"یادآوری‌های امروز":"Today's Reminders"} ({todayReminders.length})
+                </div>
+                {todayReminders.length===0 ? (
+                  <div style={{ padding:20, textAlign:"center", color:th.subtext, fontSize:13 }}>{t.noData}</div>
+                ) : (
+                  todayReminders.map((r:any)=>(
+                    <div key={r.id} style={{ padding:"11px 16px", borderBottom:`1px solid ${th.hover}`, display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+                      <div>
+                        <div style={{ fontSize:13, fontWeight:600 }}>{r.title}</div>
+                        <div style={{ fontSize:11, color:th.subtext, marginTop:2 }}>🕐 {r.time}</div>
+                      </div>
+                      <span style={s.badge(prioColor[r.priority as keyof typeof prioColor]||"#f59e0b")}>{t[r.priority as keyof typeof t]}</span>
+                    </div>
+                  ))
+                )}
+                <div style={{ padding:"10px 16px" }}>
+                  <button style={{ ...s.btn(), width:"100%", borderRadius:8 }} onClick={()=>{setTab("calendar");setShowNotif(false);}}>
+                    {lang==="fa"?"مشاهده همه":"View All"}
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
         {/* DASHBOARD */}
         {tab==="dashboard" && <>
           <h2 style={{ margin:"0 0 20px", color:th.text }}>📊 {t.dashboard}</h2>
