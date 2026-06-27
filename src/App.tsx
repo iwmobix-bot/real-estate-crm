@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts";
 
 const T = {
   fa: {
@@ -250,6 +251,39 @@ export default function App() {
             <div style={s.stat("#8b5cf6")}><div style={{ fontSize:34, fontWeight:800 }}>{activeContracts}</div><div style={{ opacity:.85, fontSize:12, marginTop:4 }}>{t.activeContracts}</div></div>
             <div style={s.stat("#ef4444")}><div style={{ fontSize:22, fontWeight:800 }}>{fmt(totalCommission)}</div><div style={{ opacity:.85, fontSize:12, marginTop:4 }}>{t.totalCommission}</div></div>
           </div>
+
+          {/* Charts */}
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16, marginBottom:16 }}>
+            {/* Bar Chart - Properties by status */}
+            <div style={s.card}>
+              <h3 style={{ margin:"0 0 16px", fontSize:14 }}>🏠 {t.byStatus}</h3>
+              <ResponsiveContainer width="100%" height={200}>
+                <BarChart data={propByStatus}>
+                  <XAxis dataKey="label" tick={{ fontSize:11, fill:th.subtext }} />
+                  <YAxis tick={{ fontSize:11, fill:th.subtext }} />
+                  <Tooltip contentStyle={{ background:th.card, border:`1px solid ${th.border}`, borderRadius:8, color:th.text }} />
+                  <Bar dataKey="count" radius={[6,6,0,0]}>
+                    {propByStatus.map((entry, i) => <Cell key={i} fill={entry.color} />)}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Pie Chart - Customers by type */}
+            <div style={s.card}>
+              <h3 style={{ margin:"0 0 16px", fontSize:14 }}>👥 {t.customerReport}</h3>
+              <ResponsiveContainer width="100%" height={200}>
+                <PieChart>
+                  <Pie data={custByType} dataKey="count" nameKey="label" cx="50%" cy="50%" outerRadius={70} label={({label, count})=>`${label} (${count})`} labelLine={false}>
+                    {custByType.map((entry, i) => <Cell key={i} fill={entry.color} />)}
+                  </Pie>
+                  <Tooltip contentStyle={{ background:th.card, border:`1px solid ${th.border}`, borderRadius:8, color:th.text }} />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 }}>
             <div style={s.card}>
               <h3 style={{ margin:"0 0 14px", fontSize:15 }}>🔔 {t.recentActivity}</h3>
