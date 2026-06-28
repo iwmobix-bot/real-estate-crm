@@ -252,7 +252,7 @@ export default function App() {
               {todayReminders.length>0 && <span style={{position:"absolute", top:-6, right:-6, background:"#ef4444", color:"#fff", borderRadius:"50%", width:18, height:18, fontSize:11, fontWeight:800, display:"flex", alignItems:"center", justifyContent:"center"}}>{todayReminders.length}</span>}
             </button>
             {showNotif && (
-              <div style={{position:"absolute", top:44, right:0, background:th.card, border:`1px solid ${th.border}`, borderRadius:14, boxShadow:"0 8px 32px rgba(0,0,0,0.15)", width:300, zIndex:50, overflow:"hidden"}}>
+              <div style={{position:"absolute", top:44, ...(lang==="fa"?{left:0}:{right:0}), background:th.card, border:`1px solid ${th.border}`, borderRadius:14, boxShadow:"0 8px 32px rgba(0,0,0,0.15)", width:300, zIndex:50, overflow:"hidden"}}>
                 <div style={{padding:"12px 16px", borderBottom:`1px solid ${th.border}`, fontWeight:700, fontSize:13}}>🔔 {lang==="fa"?"یادآوری‌های امروز":"Today's Reminders"} ({todayReminders.length})</div>
                 {todayReminders.length===0
                   ? <div style={{padding:20, textAlign:"center", color:th.subtext, fontSize:13}}>{t.noData}</div>
